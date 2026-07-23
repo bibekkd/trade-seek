@@ -42,11 +42,10 @@ export default function Navbar() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-[#0B0D10]/80 backdrop-blur-xl border-b border-white/[0.08] py-[14px] shadow-2xl shadow-black/50"
-          : "bg-transparent py-[20px]"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+        ? "bg-[#0B0D10]/80 backdrop-blur-xl border-b border-white/[0.08] py-[14px] shadow-2xl shadow-black/50"
+        : "bg-transparent py-[20px]"
+        }`}
     >
       <div className="max-w-[1280px] mx-auto px-[16px] sm:px-[24px] flex items-center justify-between">
         {/* Brand Logo */}
@@ -81,7 +80,7 @@ export default function Navbar() {
         {/* Action Buttons */}
         <div className="hidden md:flex items-center gap-[12px]">
           <a
-            href="/dashboard"
+            href="/"
             className="text-sm font-medium text-[#98A2B3] hover:text-white px-[16px] py-[8px] rounded-full hover:bg-white/[0.05] transition-all flex items-center gap-[6px]"
           >
             <Terminal className="w-[16px] h-[16px] text-[#66A7FF]" />

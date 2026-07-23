@@ -1,9 +1,12 @@
 import { spawn } from "node:child_process";
+import { execFileSync } from "node:child_process";
+import net from "node:net";
 
 const target = process.argv[2] ?? "all";
+const apiPort = Number.parseInt(process.env.API_PORT ?? "8000", 10);
 
 const commands = {
-  api: ["uv", ["run", "--project", "apps/api", "uvicorn", "--app-dir", "apps/api", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]],
+  api: ["uv", ["run", "--project", "apps/api", "uvicorn", "--app-dir", "apps/api", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", String(apiPort)]],
   worker: ["uv", ["run", "--project", "apps/api", "celery", "-A", "app.celery_app.celery_app", "--workdir", "apps/api", "worker", "--loglevel=INFO"]],
   web: ["bun", ["run", "--cwd", "apps/web", "dev"]],
 };
@@ -19,6 +22,10 @@ if (selected.some((name) => !commands[name])) {
   console.error(`Unknown dev target: ${target}`);
   console.error(`Use one of: ${[...Object.keys(commands), ...Object.keys(groups)].join(", ")}`);
   process.exit(1);
+}
+
+if (selected.includes("api")) {
+  await ensurePortAvailable("api", apiPort);
 }
 
 const children = selected.map((name) => {
@@ -76,5 +83,70 @@ function shutdown(code) {
 function writeLines(stream, prefix, chunk) {
   for (const line of chunk.toString().split(/\r?\n/)) {
     if (line.length > 0) stream.write(`${prefix} ${line}\n`);
+  }
+}
+
+async function ensurePortAvailable(name, port) {
+  if (!Number.isInteger(port) || port <= 0 || port > 65535) {
+    console.error(`[${name}] invalid API_PORT: ${process.env.API_PORT}`);
+    process.exit(1);
+  }
+
+  const available = await new Promise((resolve) => {
+    const socket = net.createConnection({ host: "127.0.0.1", port });
+    socket.setTimeout(500);
+    socket.once("connect", () => {
+      socket.destroy();
+      resolve(false);
+    });
+    socket.once("timeout", () => {
+      socket.destroy();
+      resolve(true);
+    });
+    socket.once("error", (error) => {
+      if (error.code === "ECONNREFUSED") {
+        resolve(true);
+        return;
+      }
+      if (error.code === "EHOSTUNREACH" || error.code === "ENETUNREACH") {
+        resolve(true);
+        return;
+      }
+      if (error.code === "EACCES" || error.code === "EPERM") {
+        console.error(`[${name}] cannot check port ${port}: ${error.message}`);
+        process.exit(1);
+      }
+      const pids = listeningPids(port);
+      if (pids.length > 0) {
+        resolve(false);
+        return;
+      }
+      console.error(`[${name}] cannot check port ${port}: ${error.message}`);
+      process.exit(1);
+    });
+  });
+
+  if (available) return;
+
+  const pids = listeningPids(port);
+  const pidText = pids.length > 0 ? ` by PID${pids.length === 1 ? "" : "s"} ${pids.join(", ")}` : "";
+
+  console.error(`[${name}] port ${port} is already in use${pidText}.`);
+  if (pids.length > 0) {
+    console.error(`[${name}] Stop it with: kill ${pids.join(" ")}`);
+  }
+  console.error(
+    `[${name}] Or use another port: API_PORT=8001 NEXT_PUBLIC_API_BASE_URL=http://localhost:8001 node scripts/dev.mjs ${target}`,
+  );
+  process.exit(1);
+}
+
+function listeningPids(port) {
+  try {
+    return execFileSync("lsof", [`-tiTCP:${port}`, "-sTCP:LISTEN"], { encoding: "utf8" })
+      .split(/\s+/)
+      .filter(Boolean);
+  } catch {
+    return [];
   }
 }
