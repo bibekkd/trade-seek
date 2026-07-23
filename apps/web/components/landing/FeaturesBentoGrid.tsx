@@ -82,7 +82,7 @@ export default function FeaturesBentoGrid() {
                   <Terminal className="w-[14px] h-[14px] text-[#B8D957]" />
                   <span>Prompt: &quot;Build NIFTY 15m breakout straddle strategy&quot;</span>
                 </div>
-                <div className="text-[#B8D957] font-semibold">// Generated Logic Rules:</div>
+                <div className="text-[#B8D957] font-semibold">Generated Logic Rules:</div>
                 <div className="text-white/80">if nifty.close &gt; nifty.upper_band and rsi &gt; 60:</div>
                 <div className="pl-[16px] text-[#66A7FF]">execute_order(symbol=&quot;NIFTY24600CE&quot;, qty=50, order_type=&quot;MARKET&quot;)</div>
                 <div className="pl-[16px] text-[#8D63FF]">set_stop_loss(trigger_price=nifty.close * 0.985)</div>

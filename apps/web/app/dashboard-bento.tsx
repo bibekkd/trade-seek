@@ -148,11 +148,11 @@ export default function DashboardBento({
   }, [candles]);
 
   // Mock Active Positions (Single responsibility)
-  const mockPositions = [
+  const mockPositions = useMemo(() => [
     { symbol: "NSE:RELIANCE", name: "Reliance Industries", qty: 25, entry: 2380.50, current: activeSnapshot?.instrument.symbol === "NSE:RELIANCE" ? Number(activeSnapshot.latest?.close ?? 2450) : 2465.10 },
     { symbol: "NSE:TCS", name: "Tata Consultancy Services", qty: 12, entry: 3790.00, current: activeSnapshot?.instrument.symbol === "NSE:TCS" ? Number(activeSnapshot.latest?.close ?? 3850) : 3892.40 },
     { symbol: "NSE:INFY", name: "Infosys Limited", qty: 40, entry: 1420.00, current: activeSnapshot?.instrument.symbol === "NSE:INFY" ? Number(activeSnapshot.latest?.close ?? 1445) : 1442.80 },
-  ];
+  ], [activeSnapshot]);
 
   // Calculate overall portfolio metrics
   const portfolioStats = useMemo(() => {
