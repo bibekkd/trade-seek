@@ -9,17 +9,39 @@ export default function WaitlistSection() {
   const [role, setRole] = useState("Options Trader");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const roles = ["Options Trader", "Quant Developer", "Retail Trader", "HNI / Investor"];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes("@")) {
       setError("Please enter a valid email address.");
       return;
     }
+
     setError("");
-    setSubmitted(true);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, role, source: "landing-waitlist" }),
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        setError(data.error ?? "We could not save your signup right now. Please try again.");
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setError("We could not save your signup right now. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -85,9 +107,10 @@ export default function WaitlistSection() {
                 />
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   className="px-[32px] py-[16px] rounded-full bg-[#B8D957] text-[#0B0D10] font-extrabold text-sm hover:bg-[#c6e865] transition-all duration-300 shadow-xl shadow-[#B8D957]/25 flex items-center justify-center gap-[8px] group whitespace-nowrap active:scale-[0.98]"
                 >
-                  <span>Request Access</span>
+                  <span>{isSubmitting ? "Saving..." : "Request Access"}</span>
                   <ArrowRight className="w-[16px] h-[16px] transition-transform group-hover:translate-x-[4px]" />
                 </button>
               </form>

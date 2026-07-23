@@ -9,15 +9,37 @@ export default function Hero() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes("@")) {
       setError("Please enter a valid email address.");
       return;
     }
+
     setError("");
-    setSubmitted(true);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, role: "Retail Trader", source: "landing-hero" }),
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        setError(data.error ?? "We could not save your signup right now. Please try again.");
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setError("We could not save your signup right now. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const scrollToSection = (id: string) => {
@@ -74,9 +96,10 @@ export default function Hero() {
                   </div>
                   <button
                     type="submit"
+                    disabled={isSubmitting}
                     className="px-[24px] py-[14px] rounded-full bg-[#B8D957] text-[#0B0D10] font-bold text-sm hover:bg-[#c6e865] transition-all duration-300 shadow-lg shadow-[#B8D957]/20 flex items-center justify-center gap-[8px] group whitespace-nowrap active:scale-[0.98]"
                   >
-                    <span>Join Waitlist</span>
+                    <span>{isSubmitting ? "Saving..." : "Join Waitlist"}</span>
                     <ArrowRight className="w-[16px] h-[16px] transition-transform group-hover:translate-x-[4px]" />
                   </button>
                 </form>

@@ -30,6 +30,7 @@ def test_migration_upgrade_and_downgrade(tmp_path, monkeypatch) -> None:
         "backtest_results",
         "ai_request_logs",
         "research_runs",
+        "waitlist_signups",
     }.issubset(set(inspector.get_table_names()))
 
     command.downgrade(config, "base")
