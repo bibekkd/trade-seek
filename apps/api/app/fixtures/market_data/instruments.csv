@@ -1,0 +1,4 @@
+symbol,exchange,name,isin,segment,currency
+RELIANCE,NSE,Reliance Industries Limited,INE002A01018,equity,INR
+TCS,NSE,Tata Consultancy Services Limited,INE467B01029,equity,INR
+INFY,NSE,Infosys Limited,INE009A01021,equity,INR

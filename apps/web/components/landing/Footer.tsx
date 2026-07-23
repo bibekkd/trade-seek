@@ -1,0 +1,108 @@
+"use client";
+
+import React from "react";
+import { Sparkles, Github, Twitter, MessageSquare, Linkedin, ShieldCheck, Heart } from "lucide-react";
+
+export default function Footer() {
+  return (
+    <footer className="bg-[#0B0D10] border-t border-white/[0.08] pt-[64px] pb-[48px] text-[#98A2B3] relative z-10 text-xs">
+      <div className="max-w-[1280px] mx-auto px-[16px] sm:px-[24px]">
+        
+        {/* Top Footer Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-[40px] pb-[48px] border-b border-white/[0.06]">
+          
+          {/* Brand Col */}
+          <div className="md:col-span-2 space-y-[16px]">
+            <div className="flex items-center gap-[12px]">
+              <div className="flex items-center justify-center w-[32px] h-[32px] rounded-xl bg-[#171B22] border border-white/10 text-[#B8D957]">
+                <Sparkles className="w-[16px] h-[16px]" />
+              </div>
+              <span className="text-lg font-bold text-white tracking-tight">TradeSeek</span>
+            </div>
+            <p className="text-xs text-[#98A2B3] max-w-sm leading-relaxed">
+              The AI-powered algorithmic trading platform for Indian retail traders. Build, backtest, and automate NIFTY, BankNIFTY, and equity strategies with natural language.
+            </p>
+
+            <div className="flex items-center gap-[8px] pt-[8px]">
+              <span className="w-[8px] h-[8px] rounded-full bg-[#22C55E] animate-pulse" />
+              <span className="text-[11px] font-mono text-white/80">NSE & BSE Feed Status: Operational</span>
+            </div>
+          </div>
+
+          {/* Links Col 1: Platform */}
+          <div>
+            <h4 className="font-bold text-white mb-[16px] text-xs uppercase tracking-wider">Platform</h4>
+            <ul className="space-y-[10px]">
+              <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
+              <li><a href="#ai-demo" className="hover:text-white transition-colors">AI Demo Terminal</a></li>
+              <li><a href="#integrations" className="hover:text-white transition-colors">Broker Integrations</a></li>
+              <li><a href="#pricing" className="hover:text-white transition-colors">Pricing & Perks</a></li>
+              <li><a href="/dashboard" className="text-[#66A7FF] hover:underline font-semibold">Launch App</a></li>
+            </ul>
+          </div>
+
+          {/* Links Col 2: Resources */}
+          <div>
+            <h4 className="font-bold text-white mb-[16px] text-xs uppercase tracking-wider">Resources</h4>
+            <ul className="space-y-[10px]">
+              <li><a href="#faq" className="hover:text-white transition-colors">Documentation</a></li>
+              <li><a href="#how-it-works" className="hover:text-white transition-colors">Quant Tutorials</a></li>
+              <li><a href="#faq" className="hover:text-white transition-colors">SEBI Compliance</a></li>
+              <li><a href="#waitlist" className="hover:text-white transition-colors">VIP Waitlist</a></li>
+            </ul>
+          </div>
+
+          {/* Links Col 3: Community */}
+          <div>
+            <h4 className="font-bold text-white mb-[16px] text-xs uppercase tracking-wider">Community</h4>
+            <ul className="space-y-[10px]">
+              <li>
+                <a href="https://discord.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-[6px]">
+                  <MessageSquare className="w-[14px] h-[14px] text-[#8D63FF]" />
+                  <span>Discord</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-[6px]">
+                  <Github className="w-[14px] h-[14px] text-white" />
+                  <span>GitHub</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-[6px]">
+                  <Twitter className="w-[14px] h-[14px] text-[#66A7FF]" />
+                  <span>Twitter (X)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-[6px]">
+                  <Linkedin className="w-[14px] h-[14px] text-[#66A7FF]" />
+                  <span>LinkedIn</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        {/* SEBI Market Disclaimer */}
+        <div className="py-[24px] border-b border-white/[0.06] text-[11px] text-white/40 leading-relaxed">
+          <p>
+            <strong>SEBI Disclaimer:</strong> Algorithmic trading and investments in securities/derivatives involve significant market risk. Past performance generated by AI strategy backtests is not indicative of future returns. TradeSeek is a software execution bridge and copilot workspace platform. TradeSeek is not a SEBI-registered investment advisor or stockbroker. All brokerage transactions are executed directly through your authorized stockbroker account.
+          </p>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="pt-[24px] flex flex-col sm:flex-row items-center justify-between gap-[16px] text-white/50">
+          <p>© {new Date().getFullYear()} TradeSeek Technologies India Pvt Ltd. All rights reserved.</p>
+          <div className="flex items-center gap-[24px]">
+            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-white transition-colors">Security</a>
+          </div>
+        </div>
+
+      </div>
+    </footer>
+  );
+}
